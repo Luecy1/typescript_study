@@ -1,5 +1,6 @@
 import * as https from 'https';
 import * as querystring from 'querystring';
+import {Activity} from "./activity";
 
 const config = require('config');
 
@@ -29,11 +30,34 @@ const request = https.get(url, res => {
     res.on("end", () => {
         let resData = JSON.parse(data)
 
+        const activityArray: Activity[] = [];
+
         for (let itemsKey in resData.items) {
-            console.log(resData.items[itemsKey]);
+            const item = resData.items[itemsKey];
+            const snippet = item.snippet;
+
+            const activity = new Activity(
+                item.etag,
+                item.id,
+                snippet.title,
+                snippet.publishedAt,
+                snippet.channelId,
+                snippet.description,
+                snippet.thumbnails.default.url,
+                snippet.thumbnails.medium.url,
+                snippet.thumbnails.high.url,
+                snippet.thumbnails.standard.url,
+                snippet.thumbnails.maxres.url,
+                item.contentDetails.upload.videoId
+            );
+
+            activityArray.push(activity);
         }
-        console.log(resData.items.length);
+
+        console.log(activityArray);
     })
 })
-// request.end()
 
+function upload() {
+
+}
