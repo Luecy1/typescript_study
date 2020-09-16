@@ -29,7 +29,10 @@ const request = https.get(url, res => {
     res.on("end", () => {
         let resData = JSON.parse(data)
 
-        console.log(resData.items)
+        for (let itemsKey in resData.items) {
+            console.log(resData.items[itemsKey]);
+        }
+        console.log(resData.items.length);
     })
 })
 // request.end()
