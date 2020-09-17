@@ -1,6 +1,7 @@
 import * as https from 'https';
 import * as querystring from 'querystring';
 import {Activity} from "./activity";
+import {writeDatabase} from "./index2";
 
 const config = require('config');
 
@@ -30,7 +31,7 @@ const request = https.get(url, res => {
     res.on("end", () => {
         let resData = JSON.parse(data)
 
-        const activityArray: Activity[] = [];
+        const activities: Activity[] = [];
 
         for (let itemsKey in resData.items) {
             const item = resData.items[itemsKey];
@@ -51,13 +52,15 @@ const request = https.get(url, res => {
                 item.contentDetails.upload.videoId
             );
 
-            activityArray.push(activity);
+            activities.push(activity);
         }
 
-        console.log(activityArray);
+        // desc sort publishedAt
+        activities.sort((a, b) => {
+            return b.publishedAt.localeCompare(a.publishedAt);
+        })
+
+        writeDatabase(activities);
     })
 })
 
-function upload() {
-
-}
