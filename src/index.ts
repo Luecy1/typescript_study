@@ -1,16 +1,11 @@
 import {writeDatabase} from "./firebase";
-import {getActivities} from "./youtubeDownload";
+import * as youtube from "./youtubeDownload";
 
 (async function run() {
 
-    const activities = await getActivities();
+    const searches = await youtube.getSearchList();
 
-    // desc sort publishedAt
-    activities.sort((a, b) => {
-        return b.publishedAt.localeCompare(a.publishedAt);
-    })
-
-    writeDatabase(activities);
+    writeDatabase(searches);
 })();
 
 

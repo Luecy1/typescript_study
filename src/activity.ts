@@ -29,6 +29,7 @@ export class Activity {
 }
 
 export class Search {
+    videoId: string
     publishedAt: string;
     channelId: string;
     title: string;
@@ -36,12 +37,11 @@ export class Search {
     thumbnailDefault: string;
     thumbnailMedium: string;
     thumbnailHigh: string;
-    thumbnailStandard: string;
-    thumbnailMaxres: string;
     liveBroadcastContent: string;
     publishTime: string;
 
-    constructor(publishedAt: string, channelId: string, title: string, description: string, thumbnailDefault: string, thumbnailMedium: string, thumbnailHigh: string, thumbnailStandard: string, thumbnailMaxres: string, liveBroadcastContent: string, publishTime: string) {
+    constructor(videoId: string, publishedAt: string, channelId: string, title: string, description: string, thumbnailDefault: string, thumbnailMedium: string, thumbnailHigh: string, liveBroadcastContent: string, publishTime: string) {
+        this.videoId = videoId;
         this.publishedAt = publishedAt;
         this.channelId = channelId;
         this.title = title;
@@ -49,8 +49,6 @@ export class Search {
         this.thumbnailDefault = thumbnailDefault;
         this.thumbnailMedium = thumbnailMedium;
         this.thumbnailHigh = thumbnailHigh;
-        this.thumbnailStandard = thumbnailStandard;
-        this.thumbnailMaxres = thumbnailMaxres;
         this.liveBroadcastContent = liveBroadcastContent;
         this.publishTime = publishTime;
     }

@@ -1,6 +1,6 @@
 import querystring from "querystring";
 import {get} from "./http";
-import {Activity} from "./activity";
+import {Activity, Search} from "./activity";
 
 const config = require('config');
 
@@ -55,7 +55,7 @@ export async function getVideosList() {
 
 }
 
-export async function getSearchList() {
+export async function getSearchList(): Promise<Search[]> {
 
     const searchUrl = "https://www.googleapis.com/youtube/v3/search";
 
@@ -66,5 +66,36 @@ export async function getSearchList() {
         order: "date",
     }
 
+    const url = searchUrl + "?" + querystring.encode(query);
 
+    const data = await get(url);
+
+    const resData = JSON.parse(data)
+
+    const searches: Search[] = [];
+
+    for (let itemsKey in resData.items) {
+        const item = resData.items[itemsKey];
+
+        try {
+            const search = new Search(
+                item.id.videoId,
+                item.snippet.publishedAt,
+                item.snippet.channelId,
+                item.snippet.title,
+                item.snippet.description,
+                item.snippet.thumbnails.default.url,
+                item.snippet.thumbnails.medium.url,
+                item.snippet.thumbnails.high.url,
+                item.snippet.liveBroadcastContent,
+                item.snippet.publishTime
+            );
+
+            searches.push(search);
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+    return searches;
 }
