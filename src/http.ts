@@ -20,7 +20,3 @@ export function get(url: string): Promise<string> {
     });
 }
 
-(async function exec() {
-    const result = await get("https://jsonplaceholder.typicode.com/todos/1?");
-    console.log(result);
-})()

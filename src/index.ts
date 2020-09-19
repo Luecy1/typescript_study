@@ -1,6 +1,6 @@
 import * as querystring from 'querystring';
 import {Activity} from "./activity";
-import {writeDatabase} from "./index2";
+import {writeDatabase} from "./firebase";
 import {get} from "./http";
 
 const config = require('config');
