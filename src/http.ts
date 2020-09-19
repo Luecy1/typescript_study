@@ -12,11 +12,15 @@ export function get(url: string): Promise<string> {
             res.on("end", () => {
                 resolve(data);
             });
+
+            res.on("error", () => {
+                reject();
+            });
         });
     });
 }
 
-async function exec() {
-    const result = await get("https://jsonplaceholder.typicode.com/todos/1");
+(async function exec() {
+    const result = await get("https://jsonplaceholder.typicode.com/todos/1?");
     console.log(result);
-}
+})()
