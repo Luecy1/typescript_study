@@ -12,7 +12,7 @@ export function writeDatabase(items: any[]) {
             console.error(e);
         }
     }).then(_ => {
-        console.log("complete");
+        console.log("write complete");
     });
 }
 
