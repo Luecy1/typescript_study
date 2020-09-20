@@ -1,11 +1,16 @@
-import {writeDatabase} from "./firebase";
 import * as youtube from "./youtubeDownload";
 
 (async function run() {
 
     const searches = await youtube.getSearchList();
 
-    writeDatabase(searches);
+    const videoIds = searches.map(value => value.videoId);
+
+    const videos = await youtube.getVideosList(videoIds);
+
+    console.log(videos);
+
+    // writeDatabase(searches);
 })();
 
 

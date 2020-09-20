@@ -1,6 +1,7 @@
 import querystring from "querystring";
 import {get} from "./http";
 import {Activity, Search} from "./activity";
+import {LiveStreamingDetails} from "./liveStream";
 
 const config = require('config');
 
@@ -26,8 +27,13 @@ export async function getActivities(): Promise<Activity[]> {
 
     const activities: Activity[] = [];
 
-    for (let itemsKey in resData.items) {
-        const item = resData.items[itemsKey];
+    for (let itemKey in resData.items) {
+
+        if (!resData.items.hasOwnProperty(itemKey)) {
+            continue;
+        }
+
+        const item = resData.items[itemKey];
         const snippet = item.snippet;
 
         const activity = new Activity(
@@ -51,10 +57,6 @@ export async function getActivities(): Promise<Activity[]> {
     return activities;
 }
 
-export async function getVideosList() {
-
-}
-
 export async function getSearchList(): Promise<Search[]> {
 
     const searchUrl = "https://www.googleapis.com/youtube/v3/search";
@@ -74,8 +76,13 @@ export async function getSearchList(): Promise<Search[]> {
 
     const searches: Search[] = [];
 
-    for (let itemsKey in resData.items) {
-        const item = resData.items[itemsKey];
+    for (let itemKey in resData.items) {
+
+        if (!resData.items.hasOwnProperty(itemKey)) {
+            continue;
+        }
+
+        const item = resData.items[itemKey];
 
         try {
             const search = new Search(
@@ -98,4 +105,43 @@ export async function getSearchList(): Promise<Search[]> {
 
     }
     return searches;
+}
+
+export async function getVideosList(videoIds: string[]): Promise<LiveStreamingDetails[]> {
+
+    const searchUrl = "https://www.googleapis.com/youtube/v3/videos";
+
+    const query = {
+        key: api,
+        part: "id,snippet,liveStreamingDetails",
+        id: videoIds.join(",")
+    }
+
+    const url = searchUrl + "?" + querystring.encode(query);
+
+    const data = await get(url);
+
+    const resData = JSON.parse(data)
+
+    const liveStreamingDetails: LiveStreamingDetails[] = [];
+
+    for (let itemKey in resData.items) {
+
+        if (!resData.items.hasOwnProperty(itemKey)) {
+            continue;
+        }
+
+        const item = resData.items[itemKey];
+
+        const liveItem = new LiveStreamingDetails(
+            item.id,
+            item.liveStreamingDetails.actualStartTime,
+            item.liveStreamingDetails.actualEndTime,
+            item.liveStreamingDetails.scheduledStartTime,
+        );
+
+        liveStreamingDetails.push(liveItem);
+    }
+
+    return liveStreamingDetails;
 }

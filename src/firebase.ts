@@ -1,14 +1,13 @@
 import admin from "firebase-admin";
-import {Search} from "./activity";
 
 const app = admin.initializeApp({
     credential: admin.credential.applicationDefault(),
     databaseURL: 'https://data-api-10cce.firebaseio.com/'
 });
 
-export function writeDatabase(searches: Search[]) {
+export function writeDatabase(items: any[]) {
 
-    app.database().ref("youtube_data/yukihanaramili").set(searches, e => {
+    app.database().ref("youtube_data/yukihanaramili").set(items, e => {
         if (e != null) {
             console.error(e);
         }
@@ -28,5 +27,3 @@ export function readDatabase() {
             });
         });
 }
-
-readDatabase();
