@@ -1,4 +1,4 @@
-export class LiveStreamingDetails {
+export class LiveStreamingDetail {
     videoId: string;
     actualStartTime: string;
     actualEndTime: string;

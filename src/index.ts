@@ -1,8 +1,8 @@
 import * as youtube from "./youtubeDownload";
-import {LiveStreamingDetails} from "./liveStream";
-import {Search} from "./activity";
+import {LiveStreamingDetail} from "./model/liveStream";
+import {Search} from "./model/activity";
 import {writeDatabase} from "./firebase";
-import {LiveStreamItem} from "./model";
+import {LiveStreamItem} from "./model/liveStreamItem";
 
 (async function run() {
 
@@ -18,7 +18,7 @@ import {LiveStreamItem} from "./model";
 })();
 
 
-function merge(searches: Search[], videos: LiveStreamingDetails[]): LiveStreamItem[] {
+function merge(searches: Search[], videos: LiveStreamingDetail[]): LiveStreamItem[] {
 
     const videoIds = searches.map(value => value.videoId);
 

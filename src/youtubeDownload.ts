@@ -1,7 +1,7 @@
 import querystring from "querystring";
 import {get} from "./http";
-import {Activity, Search} from "./activity";
-import {LiveStreamingDetails} from "./liveStream";
+import {Activity, Search} from "./model/activity";
+import {LiveStreamingDetail} from "./model/liveStream";
 
 const config = require('config');
 
@@ -107,7 +107,7 @@ export async function getSearchList(): Promise<Search[]> {
     return searches;
 }
 
-export async function getVideosList(videoIds: string[]): Promise<LiveStreamingDetails[]> {
+export async function getVideosList(videoIds: string[]): Promise<LiveStreamingDetail[]> {
 
     const searchUrl = "https://www.googleapis.com/youtube/v3/videos";
 
@@ -123,7 +123,7 @@ export async function getVideosList(videoIds: string[]): Promise<LiveStreamingDe
 
     const resData = JSON.parse(data)
 
-    const liveStreamingDetails: LiveStreamingDetails[] = [];
+    const liveStreamingDetails: LiveStreamingDetail[] = [];
 
     for (let itemKey in resData.items) {
 
@@ -133,10 +133,10 @@ export async function getVideosList(videoIds: string[]): Promise<LiveStreamingDe
 
         const item = resData.items[itemKey];
 
-        const liveItem = new LiveStreamingDetails(
+        const liveItem = new LiveStreamingDetail(
             item.id,
-            item.liveStreamingDetails.actualStartTime,
-            item.liveStreamingDetails.actualEndTime,
+            item.liveStreamingDetails.actualStartTime ?? "",
+            item.liveStreamingDetails.actualEndTime ?? "",
             item.liveStreamingDetails.scheduledStartTime,
         );
 
