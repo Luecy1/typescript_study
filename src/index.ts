@@ -3,10 +3,14 @@ import {LiveStreamingDetail} from "./model/liveStream";
 import {Search} from "./model/activity";
 import {writeDatabase} from "./firebase";
 import {LiveStreamItem} from "./model/liveStreamItem";
+import {LIVER_DATA} from "./liverData";
 
 (async function run() {
 
-    const searches = await youtube.getSearchList();
+    const channelid = LIVER_DATA[0].channelId;
+    const path = LIVER_DATA[0].path
+
+    const searches = await youtube.getSearchList(channelid);
 
     const videoIds = searches.map(value => value.videoId);
 
@@ -14,10 +18,10 @@ import {LiveStreamItem} from "./model/liveStreamItem";
 
     const liveStreamItem = merge(searches, videos);
 
-    writeDatabase(liveStreamItem);
+    writeDatabase(path, liveStreamItem);
 })();
 
-
+// searchの結果とvideoの結果を混ぜる
 function merge(searches: Search[], videos: LiveStreamingDetail[]): LiveStreamItem[] {
 
     const videoIds = searches.map(value => value.videoId);

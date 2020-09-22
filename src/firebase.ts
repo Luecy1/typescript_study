@@ -5,9 +5,9 @@ const app = admin.initializeApp({
     databaseURL: 'https://data-api-10cce.firebaseio.com/'
 });
 
-export function writeDatabase(items: any[]) {
+export function writeDatabase(path: string, items: any[]) {
 
-    app.database().ref("youtube_data/yukihanaramili").set(items, e => {
+    app.database().ref(path).set(items, e => {
         if (e != null) {
             console.error(e);
         }

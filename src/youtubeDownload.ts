@@ -57,13 +57,13 @@ export async function getActivities(): Promise<Activity[]> {
     return activities;
 }
 
-export async function getSearchList(): Promise<Search[]> {
+export async function getSearchList(channelId: string): Promise<Search[]> {
 
     const searchUrl = "https://www.googleapis.com/youtube/v3/search";
 
     const query = {
         key: api,
-        channelId: "UCFKOVgVbGmX65RxO3EtH3iw",
+        channelId: channelId,
         part: "id,snippet",
         order: "date",
     }
