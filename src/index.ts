@@ -6,7 +6,7 @@ import {LiveStreamItem} from "./model/liveStreamItem";
 import {LIVER_DATA, LiverData} from "./liverData";
 
 
-(async function run() {
+export async function run() {
     const task = []
     for (let liverdatum of LIVER_DATA) {
         task.push(runForLiver(liverdatum));
@@ -14,7 +14,9 @@ import {LIVER_DATA, LiverData} from "./liverData";
     await Promise.all(task);
 
     process.exit(0);
-})();
+}
+
+run();
 
 async function runForLiver(liverdatum: LiverData): Promise<void> {
     const searches = await youtube.getSearchList(liverdatum.channelId);

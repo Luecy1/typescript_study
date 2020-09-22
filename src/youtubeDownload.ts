@@ -36,22 +36,27 @@ export async function getActivities(channelId: string): Promise<Activity[]> {
         const item = resData.items[itemKey];
         const snippet = item.snippet;
 
-        const activity = new Activity(
-            item.etag,
-            item.id,
-            snippet.title,
-            snippet.publishedAt,
-            snippet.channelId,
-            snippet.description,
-            snippet.thumbnails.default.url,
-            snippet.thumbnails.medium.url,
-            snippet.thumbnails.high.url,
-            snippet.thumbnails.standard.url,
-            snippet.thumbnails.maxres.url,
-            item.contentDetails.upload.videoId
-        );
+        try {
+            const activity = new Activity(
+                item.etag,
+                item.id,
+                snippet.title,
+                snippet.publishedAt,
+                snippet.channelId,
+                snippet.description,
+                snippet.thumbnails.default.url,
+                snippet.thumbnails.medium.url,
+                snippet.thumbnails.high.url,
+                snippet.thumbnails.standard.url,
+                snippet.thumbnails.maxres.url,
+                item.contentDetails.upload.videoId
+            );
 
-        activities.push(activity);
+            activities.push(activity);
+        } catch (e) {
+            console.warn("item read error", item);
+            console.warn(e);
+        }
     }
 
     return activities;
@@ -102,7 +107,8 @@ export async function getSearchList(channelId: string): Promise<Search[]> {
 
             searches.push(search);
         } catch (e) {
-            console.log(e);
+            console.warn("item read error", item);
+            console.warn(e);
         }
 
     }
