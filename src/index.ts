@@ -9,7 +9,7 @@ import {LIVER_DATA, LiverData} from "./model/liverData";
 export async function run() {
     const task = []
     for (let liverdatum of LIVER_DATA) {
-        task.push(runForLiver(liverdatum));
+        task.push(runEach(liverdatum));
     }
     await Promise.all(task);
 
@@ -18,7 +18,7 @@ export async function run() {
 
 run();
 
-async function runForLiver(liverdatum: LiverData): Promise<void> {
+async function runEach(liverdatum: LiverData): Promise<void> {
     const searches = await youtube.getSearchList(liverdatum.channelId);
 
     const videoIds = searches.map(value => value.videoId);
@@ -29,6 +29,8 @@ async function runForLiver(liverdatum: LiverData): Promise<void> {
 
     if (liveStreamItem.length > 0) {
         await writeDatabase(liverdatum.path, liveStreamItem);
+    } else {
+        console.warn(liverdatum.name, "no write database because no data");
     }
 
     return Promise.resolve();
