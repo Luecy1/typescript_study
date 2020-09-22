@@ -7,12 +7,16 @@ import {LIVER_DATA, LiverData} from "./liverData";
 
 
 (async function run() {
+    const task = []
     for (let liverdatum of LIVER_DATA) {
-        runForLiver(liverdatum);
+        task.push(runForLiver(liverdatum));
     }
+    await Promise.all(task);
+
+    process.exit(0);
 })();
 
-async function runForLiver(liverdatum: LiverData) {
+async function runForLiver(liverdatum: LiverData): Promise<void> {
     const searches = await youtube.getSearchList(liverdatum.channelId);
 
     const videoIds = searches.map(value => value.videoId);
@@ -21,7 +25,9 @@ async function runForLiver(liverdatum: LiverData) {
 
     const liveStreamItem = merge(searches, videos);
 
-    writeDatabase(liverdatum.path, liveStreamItem);
+    await writeDatabase(liverdatum.path, liveStreamItem);
+
+    return Promise.resolve();
 }
 
 // searchの結果とvideoの結果を混ぜる

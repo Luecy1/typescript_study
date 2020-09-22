@@ -5,15 +5,13 @@ const app = admin.initializeApp({
     databaseURL: 'https://data-api-10cce.firebaseio.com/'
 });
 
-export function writeDatabase(path: string, items: any[]) {
-
-    app.database().ref(path).set(items, e => {
+export async function writeDatabase(path: string, items: any[]): Promise<void> {
+    await app.database().ref(path).set(items, e => {
         if (e != null) {
             console.error(e);
         }
-    }).then(_ => {
-        console.log(`${path} write complete`);
-    });
+    })
+    console.log(`${path} write complete`);
 }
 
 export function readDatabase(path: string) {
