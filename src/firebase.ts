@@ -12,12 +12,12 @@ export function writeDatabase(path: string, items: any[]) {
             console.error(e);
         }
     }).then(_ => {
-        console.log("write complete");
+        console.log(`${path} write complete`);
     });
 }
 
-export function readDatabase() {
-    app.database().ref("youtube_data/yukihanaramili")
+export function readDatabase(path: string) {
+    app.database().ref(path)
         .orderByChild("publishedAt")
         .on("value", (snapshot, _) => {
 

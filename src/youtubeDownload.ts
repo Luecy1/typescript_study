@@ -8,13 +8,13 @@ const config = require('config');
 // fetch config/default.json
 const api = config.get("Youtube.apikey");
 
-export async function getActivities(): Promise<Activity[]> {
+export async function getActivities(channelId: string): Promise<Activity[]> {
 
     const activity_url = "https://www.googleapis.com/youtube/v3/activities";
 
     const query = {
         key: api,
-        channelId: "UCFKOVgVbGmX65RxO3EtH3iw",
+        channelId: channelId,
         part: "id,snippet,contentDetails",
         maxResults: 25
     }
@@ -67,6 +67,7 @@ export async function getSearchList(channelId: string): Promise<Search[]> {
         part: "id,snippet",
         order: "date",
         maxResults: 20,
+        type: "video",
     }
 
     const url = searchUrl + "?" + querystring.encode(query);
