@@ -1,9 +1,9 @@
-import * as youtube from "./youtubeDownload";
+import * as youtube from "./util/youtubeDownload";
 import {LiveStreamingDetail} from "./model/liveStream";
 import {Search} from "./model/activity";
-import {writeDatabase} from "./firebase";
+import {writeDatabase} from "./util/firebase";
 import {LiveStreamItem} from "./model/liveStreamItem";
-import {LIVER_DATA, LiverData} from "./liverData";
+import {LIVER_DATA, LiverData} from "./model/liverData";
 
 
 export async function run() {
@@ -15,7 +15,6 @@ export async function run() {
 
     process.exit(0);
 }
-
 run();
 
 async function runForLiver(liverdatum: LiverData): Promise<void> {

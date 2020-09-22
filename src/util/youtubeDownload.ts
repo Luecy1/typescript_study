@@ -1,7 +1,7 @@
 import querystring from "querystring";
 import {get} from "./http";
-import {Activity, Search} from "./model/activity";
-import {LiveStreamingDetail} from "./model/liveStream";
+import {Activity, Search} from "../model/activity";
+import {LiveStreamingDetail} from "../model/liveStream";
 
 const config = require('config');
 
