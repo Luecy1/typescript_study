@@ -3,14 +3,17 @@ import {LiveStreamingDetail} from "./model/liveStream";
 import {Search} from "./model/activity";
 import {writeDatabase} from "./firebase";
 import {LiveStreamItem} from "./model/liveStreamItem";
-import {LIVER_DATA} from "./liverData";
+import {LIVER_DATA, LiverData} from "./liverData";
+
 
 (async function run() {
+    for (let liverdatum of LIVER_DATA) {
+        runForLiver(liverdatum);
+    }
+})();
 
-    const channelid = LIVER_DATA[0].channelId;
-    const path = LIVER_DATA[0].path
-
-    const searches = await youtube.getSearchList(channelid);
+async function runForLiver(liverdatum: LiverData) {
+    const searches = await youtube.getSearchList(liverdatum.channelId);
 
     const videoIds = searches.map(value => value.videoId);
 
@@ -18,8 +21,8 @@ import {LIVER_DATA} from "./liverData";
 
     const liveStreamItem = merge(searches, videos);
 
-    writeDatabase(path, liveStreamItem);
-})();
+    writeDatabase(liverdatum.path, liveStreamItem);
+}
 
 // searchの結果とvideoの結果を混ぜる
 function merge(searches: Search[], videos: LiveStreamingDetail[]): LiveStreamItem[] {
@@ -37,12 +40,18 @@ function merge(searches: Search[], videos: LiveStreamingDetail[]): LiveStreamIte
             continue;
         }
 
-        const video = videos.find(value => {
+        let video = videos.find(value => {
             return value.videoId === videoId;
         });
 
         if (video === undefined) {
-            continue;
+            // 生放送のデータでない場合は空を設定する
+            video = new LiveStreamingDetail(
+                videoId,
+                "",
+                "",
+                "",
+            );
         }
 
         const liveStreamItem = new LiveStreamItem(

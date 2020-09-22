@@ -66,6 +66,7 @@ export async function getSearchList(channelId: string): Promise<Search[]> {
         channelId: channelId,
         part: "id,snippet",
         order: "date",
+        maxResults: 20,
     }
 
     const url = searchUrl + "?" + querystring.encode(query);
@@ -133,14 +134,23 @@ export async function getVideosList(videoIds: string[]): Promise<LiveStreamingDe
 
         const item = resData.items[itemKey];
 
-        const liveItem = new LiveStreamingDetail(
-            item.id,
-            item.liveStreamingDetails.actualStartTime ?? "",
-            item.liveStreamingDetails.actualEndTime ?? "",
-            item.liveStreamingDetails.scheduledStartTime,
-        );
+        try {
 
-        liveStreamingDetails.push(liveItem);
+            if (item.hasOwnProperty("liveStreamingDetails")) {
+
+                const liveItem = new LiveStreamingDetail(
+                    item.id,
+                    item.liveStreamingDetails.actualStartTime ?? "",
+                    item.liveStreamingDetails.actualEndTime ?? "",
+                    item.liveStreamingDetails.scheduledStartTime,
+                );
+                liveStreamingDetails.push(liveItem);
+            }
+
+        } catch (e) {
+            console.warn(item);
+            console.warn(e);
+        }
     }
 
     return liveStreamingDetails;
