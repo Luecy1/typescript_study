@@ -15,6 +15,7 @@ export async function run() {
 
     process.exit(0);
 }
+
 run();
 
 async function runForLiver(liverdatum: LiverData): Promise<void> {
@@ -26,7 +27,9 @@ async function runForLiver(liverdatum: LiverData): Promise<void> {
 
     const liveStreamItem = merge(searches, videos);
 
-    await writeDatabase(liverdatum.path, liveStreamItem);
+    if (liveStreamItem.length > 0) {
+        await writeDatabase(liverdatum.path, liveStreamItem);
+    }
 
     return Promise.resolve();
 }
